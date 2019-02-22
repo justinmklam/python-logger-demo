@@ -37,11 +37,8 @@ def initialize_logger(root_name):
                 logger.debug('%s created.'%config.LOG_FILE_DIRECTORY)
                 os.makedirs(config.LOG_FILE_DIRECTORY)
 
-            # ie. my_logger_2019-02-22.log
-            log_name = '%s_%s.log' % (root_name, str(datetime.datetime.today().strftime('%Y-%m-%d')))
-
             fh = RotatingFileHandler(
-                filename=os.path.join(config.LOG_FILE_DIRECTORY, log_name),
+                filename=os.path.join(config.LOG_FILE_DIRECTORY, root_name + '.log'),
                 maxBytes=config.MAX_SIZE_OF_SINGLE_LOG,
                 backupCount=config.NUM_ROTATING_LOGS
             )
