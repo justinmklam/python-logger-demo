@@ -1,0 +1,10 @@
+2019-02-22 10:02:38,928 [DEBUG] main.setup_logger: Logger initialized.
+2019-02-22 10:02:38,929 [DEBUG] main.demo_log_msgs: This is a debug level message
+2019-02-22 10:02:38,929 [INFO] main.demo_log_msgs: This is an info level message
+2019-02-22 10:02:38,929 [WARNING] main.demo_log_msgs: This is a warning level message
+2019-02-22 10:02:38,929 [ERROR] main.demo_log_msgs: This is an error level message
+2019-02-22 10:02:38,929 [DEBUG] main.<module>: Starting module 1
+2019-02-22 10:02:38,929 [DEBUG] module1.__init__: Initializing class
+2019-02-22 10:02:38,929 [INFO] module1.myfunc: Doing stuff
+2019-02-22 10:02:38,929 [DEBUG] module1.__del__: Destroying class
+2019-02-22 10:02:38,929 [DEBUG] main.<module>: Terminated.
