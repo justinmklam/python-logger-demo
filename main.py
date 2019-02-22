@@ -8,7 +8,7 @@ import config
 # Custom module to demonstrate how the logger interacts from another class
 import module1
 
-def setup_logger(root_name):
+def initialize_logger(root_name):
     """Initializes logger with stream and rotating file handlers.
 
     Args:
@@ -65,7 +65,7 @@ def demo_log_msgs(logger):
     logger.error('This is an error level message')
 
 if __name__ == "__main__":
-    logger = setup_logger(config.LOG_ROOT_NAME)
+    logger = initialize_logger(config.LOG_ROOT_NAME)
 
     demo_log_msgs(logger)
 
