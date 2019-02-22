@@ -8,17 +8,17 @@ import config
 # Custom module to demonstrate how the logger interacts from another class
 import module1
 
-def initialize_logger(root_name):
+def initialize_logger(filename=None):
     """Initializes logger with stream and rotating file handlers.
 
     Args:
-        root_name (str): Name of root logger to use
+        filename (str): Log file name to use. If none is set, then default to root logger name
 
     Returns:
         logging.Logger: Logger handler
     """
 
-    logger = logging.getLogger(root_name)
+    logger = logging.getLogger(config.LOG_ROOT_NAME)
     logger.setLevel(config.LOGGING_LEVEL)
 
     # This is a useful check if multiple classes will be importing this method.
@@ -37,8 +37,11 @@ def initialize_logger(root_name):
                 logger.debug('%s created.'%config.LOG_FILE_DIRECTORY)
                 os.makedirs(config.LOG_FILE_DIRECTORY)
 
+            if filename is None:
+                filename = config.LOG_ROOT_NAME
+
             fh = RotatingFileHandler(
-                filename=os.path.join(config.LOG_FILE_DIRECTORY, root_name + '.log'),
+                filename=os.path.join(config.LOG_FILE_DIRECTORY, filename + '.log'),
                 maxBytes=config.MAX_SIZE_OF_SINGLE_LOG,
                 backupCount=config.NUM_ROTATING_LOGS
             )
@@ -62,7 +65,7 @@ def demo_log_msgs(logger):
     logger.error('This is an error level message')
 
 if __name__ == "__main__":
-    logger = initialize_logger(config.LOG_ROOT_NAME)
+    logger = initialize_logger()
 
     demo_log_msgs(logger)
 
