@@ -3,11 +3,11 @@
 
 import logging
 
-LOG_ROOT_NAME = 'my_logger'
-LOG_FILE_DIRECTORY = "logs/"
-
-LOG_TO_FILE = True
-LOGGING_LEVEL = logging.DEBUG
-
-MAX_SIZE_OF_SINGLE_LOG = 2e3 # in bytes (so 2KB in this case)
-NUM_ROTATING_LOGS = 5
+LOGGER_CONFIGS = {
+    "root_name": "my_logger",
+    "directory": "logs",
+    "log_to_file": True,
+    "logging_level": logging.DEBUG,
+    "max_size_of_single_log": 2e3,  # in bytes (so 2KB in this case)
+    "num_rotating_logs": 5,
+}

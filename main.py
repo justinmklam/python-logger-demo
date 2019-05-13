@@ -4,7 +4,7 @@ import datetime
 import logging
 from logging.handlers import RotatingFileHandler
 
-import config
+from config import LOGGER_CONFIGS
 
 # Custom module to demonstrate how the logger interacts from another class
 import module1
@@ -21,40 +21,40 @@ class Logger(object):
             logging.Logger: Logger handler
         """
 
-        self.logger = logging.getLogger(config.LOG_ROOT_NAME)
-        self.logger.setLevel(config.LOGGING_LEVEL)
+        self.logger = logging.getLogger(LOGGER_CONFIGS["root_name"])
+        self.logger.setLevel(LOGGER_CONFIGS["logging_level"])
 
         # This is a useful check if multiple classes will be importing this method.
         # It ensures that the logger only gets initialized once.
         if not self.logger.handlers:
             formatter = logging.Formatter(
-                '%(asctime)s [%(levelname)s] %(module)s.%(funcName)s: %(message)s'
+                "%(asctime)s [%(levelname)s] %(module)s.%(funcName)s: %(message)s"
             )
             sh = logging.StreamHandler()
-            sh.setLevel(config.LOGGING_LEVEL)
+            sh.setLevel(LOGGER_CONFIGS["logging_level"])
             sh.setFormatter(formatter)
             self.logger.addHandler(sh)
 
-            if config.LOG_TO_FILE:
+            if LOGGER_CONFIGS["log_to_file"]:
                 self._initialize_file_logger(filename, formatter)
 
             # Logger handler for unhandled exception
             sys.excepthook = self._handle_exception
 
-        self.logger.debug('Logger initialized.')
+        self.logger.debug("Logger initialized.")
 
     def _initialize_file_logger(self, filename, formatter):
-        if not os.path.exists(config.LOG_FILE_DIRECTORY):
-            self.logger.debug('%s created.'%config.LOG_FILE_DIRECTORY)
-            os.makedirs(config.LOG_FILE_DIRECTORY)
+        if not os.path.exists(LOGGER_CONFIGS["directory"]):
+            self.logger.debug("%s created." % LOGGER_CONFIGS["directory"])
+            os.makedirs(LOGGER_CONFIGS["directory"])
 
         if filename is None:
-            filename = config.LOG_ROOT_NAME
+            filename = LOGGER_CONFIGS["root_name"]
 
         fh = RotatingFileHandler(
-            filename=os.path.join(config.LOG_FILE_DIRECTORY, filename + '.log'),
-            maxBytes=config.MAX_SIZE_OF_SINGLE_LOG,
-            backupCount=config.NUM_ROTATING_LOGS
+            filename=os.path.join(LOGGER_CONFIGS["directory"], filename + ".log"),
+            maxBytes=LOGGER_CONFIGS["max_size_of_single_log"],
+            backupCount=LOGGER_CONFIGS["num_rotating_logs"],
         )
         fh.setFormatter(formatter)
         self.logger.addHandler(fh)
@@ -72,7 +72,9 @@ class Logger(object):
             sys.__excepthook__(exc_type, exc_value, exc_traceback)
             return
 
-        self.logger.error("Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback))
+        self.logger.error(
+            "Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback)
+        )
 
     def debug(self, msg, *args, **kwargs):
         self.logger.debug(msg, *args, **kwargs)
@@ -89,6 +91,14 @@ class Logger(object):
     def critical(self, msg, *args, **kwargs):
         self.logger.critical(msg, *args, **kwargs)
 
+    @property
+    def streamhandler(self):
+        return self.logger.handlers[0]
+
+    @property
+    def filehandler(self):
+        return self.logger.handlers[1]
+
 
 def demo_log_msgs(logger):
     """Logs messages at four logging levels.
@@ -97,18 +107,19 @@ def demo_log_msgs(logger):
         logger (logging.Logger): Logger handler
     """
 
-    logger.debug('This is a debug level message')
-    logger.info('This is an info level message')
-    logger.warning('This is a warning level message')
-    logger.error('This is an error level message')
-    logger.critical('This is a critical level message')
+    logger.debug("This is a debug level message")
+    logger.info("This is an info level message")
+    logger.warning("This is a warning level message")
+    logger.error("This is an error level message")
+    logger.critical("This is a critical level message")
+
 
 if __name__ == "__main__":
     logger = Logger()
 
     demo_log_msgs(logger)
 
-    logger.debug('Starting module 1')
+    logger.debug("Starting module 1")
     module1.MyModule1()
 
     raise RuntimeError("Unhandled error")
