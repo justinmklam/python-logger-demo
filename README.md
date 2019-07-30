@@ -1,12 +1,13 @@
 # Python Logger Demo
 
-Simple logging example in Python with a custom module for common convenience operations.
+Simple custom logging module in Python for common convenience operations.
 
 ## Features
 
-+ Prints log messages to console and file
-+ Can specify the max size of each log, and how many logs to store
-+ Each log message shows the file/module and function it came from
++ Prints timestamped messages to:
+  + Console (on stdout)
+  + A configurable rotating file handler
++ Each message shows the file/module and function it came from
 + Logs unhandled exceptions
 
 ## Usage
@@ -19,7 +20,7 @@ import logger
 # Use the file's name as the logger name
 log = logger.add_logger(__name__)
 
-log.debug("Hello World")
+log.debug("Hello World!")
 ```
 
 To change the logging level on a module level:
