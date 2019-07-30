@@ -11,10 +11,10 @@ from logging.handlers import RotatingFileHandler
 
 
 ROOT_NAME = "my_logger"
-LOG_DIRECTORY = "logs"
+LOG_DIRECTORY = "logs/"
 LOG_TO_FILE = True
 LOG_LEVEL = logging.DEBUG
-MAX_SIZE_OF_SINGLE_LOG = 2e3
+MAX_SIZE_OF_SINGLE_LOG_MB = 0.2
 NUM_ROTATING_LOGS = 5
 
 # Remap of levels for easy access from external modules
@@ -80,7 +80,7 @@ class Logger(logging.Logger):
 
         fh = RotatingFileHandler(
             filename=os.path.join(LOG_DIRECTORY, filename + ".log"),
-            maxBytes=MAX_SIZE_OF_SINGLE_LOG,
+            maxBytes=MAX_SIZE_OF_SINGLE_LOG_MB * 1e6,
             backupCount=NUM_ROTATING_LOGS,
         )
         fh.setFormatter(formatter)
