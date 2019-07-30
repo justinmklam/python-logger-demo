@@ -1,19 +1,19 @@
 import logger
 
 # Must match root logger name (in this case, 'my_logger')
-logger = logger.add_logger(__name__)
+log = logger.add_logger(__name__)
 
 class MyModule1(object):
     """Example module to demonstrate from class methods.
     """
 
     def __init__(self):
-        logger.debug("Initializing class")
+        log.debug("Initializing class")
 
         self.myfunc()
 
     def myfunc(self):
-        logger.info("Doing stuff")
+        log.info("Doing stuff")
 
     def __del__(self):
-        logger.debug("Destroying class")
+        log.debug("Destroying class")
