@@ -17,6 +17,12 @@ LOG_LEVEL = logging.DEBUG
 MAX_SIZE_OF_SINGLE_LOG = 2e3
 NUM_ROTATING_LOGS = 5
 
+# Remap of levels for easy access from external modules
+DEBUG = logging.DEBUG
+INFO = logging.INFO
+WARNING = logging.WARNING
+ERROR = logging.ERROR
+CRITICAL = logging.CRITICAL
 
 def add_logger(name):
     """Add child logger to root logger
@@ -30,7 +36,7 @@ def add_logger(name):
     return logging.getLogger("%s.%s"%(ROOT_NAME, name))
 
 
-class Logger(object):
+class Logger(logging.Logger):
     def __init__(self, filename=None):
         """Initializes logger with stream and rotating file handlers.
 
@@ -62,7 +68,7 @@ class Logger(object):
             # Logger handler for unhandled exception
             sys.excepthook = self._handle_exception
 
-        self.logger.debug("Logger initialized.")
+            self.logger.debug("Logger initialized.")
 
     def _initialize_file_logger(self, filename, formatter):
         if not os.path.exists(LOG_DIRECTORY):
@@ -97,21 +103,6 @@ class Logger(object):
             "Uncaught exception", exc_info=(exc_type, exc_value, exc_traceback)
         )
 
-    def debug(self, msg, *args, **kwargs):
-        self.logger.debug(msg, *args, **kwargs)
-
-    def info(self, msg, *args, **kwargs):
-        self.logger.info(msg, *args, **kwargs)
-
-    def warning(self, msg, *args, **kwargs):
-        self.logger.warning(msg, *args, **kwargs)
-
-    def error(self, msg, *args, **kwargs):
-        self.logger.error(msg, *args, **kwargs)
-
-    def critical(self, msg, *args, **kwargs):
-        self.logger.critical(msg, *args, **kwargs)
-
     @property
     def streamhandler(self):
         return self.logger.handlers[0]
@@ -119,6 +110,31 @@ class Logger(object):
     @property
     def filehandler(self):
         return self.logger.handlers[1]
+
+def set_streamhandler_level(level):
+    """Set logging level for stream handler.
+
+    Args:
+        level (int): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    """
+    Logger().streamhandler.setLevel(level)
+
+def set_filehandler_level(level):
+    """Set logging level for file handler.
+
+    Args:
+        level (int): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    """
+    Logger().filehandler.setLevel(level)
+
+def set_level(level):
+    """Set logging level for stream and file handlers.
+
+    Args:
+        level (int): Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    """
+    set_streamhandler_level(level)
+    set_filehandler_level(level)
 
 ####
 
