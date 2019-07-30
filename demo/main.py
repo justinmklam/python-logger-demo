@@ -1,3 +1,7 @@
+# Allow relative import
+import os, sys
+sys.path.insert(1, os.path.join(sys.path[0], '..'))
+
 # Custom logging module
 import logger
 

@@ -58,7 +58,7 @@ Optional: Configure the global variables in `logger.py`:
 To run the demo, simply execute:
 
 ```bash
-python main.py
+python demo/main.py
 ```
 
 Example output:
