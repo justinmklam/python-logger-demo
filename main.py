@@ -4,7 +4,9 @@ import logger
 # Custom module to demonstrate how the logger interacts from another class
 import module1
 
-def demo_log_msgs(logger):
+logger = logger.add_logger(__name__)
+
+def demo_log_msgs():
     """Logs messages at four logging levels.
 
     Args:
@@ -19,11 +21,9 @@ def demo_log_msgs(logger):
 
 
 if __name__ == "__main__":
-    log = logger.Logger()
+    demo_log_msgs()
 
-    demo_log_msgs(log)
-
-    log.debug("Starting module 1")
+    logger.debug("Starting module 1")
     module1.MyModule1()
 
     raise RuntimeError("This unhandled error will be saved in the log")

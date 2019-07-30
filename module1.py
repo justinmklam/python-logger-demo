@@ -1,9 +1,7 @@
-import logging
-
-from config import LOGGER_CONFIGS
+import logger
 
 # Must match root logger name (in this case, 'my_logger')
-logger = logging.getLogger("%s.%s"%(LOGGER_CONFIGS["root_name"], __name__))
+logger = logger.add_logger(__name__)
 
 class MyModule1(object):
     """Example module to demonstrate from class methods.

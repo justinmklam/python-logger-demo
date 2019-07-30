@@ -11,6 +11,16 @@ from logging.handlers import RotatingFileHandler
 
 from config import LOGGER_CONFIGS
 
+def add_logger(name):
+    """Add child logger to root logger
+
+    Args:
+        name (str): Name of child logger
+
+    Returns:
+        logger: Return a logger with the specified name
+    """
+    return logging.getLogger("%s.%s"%(LOGGER_CONFIGS["root_name"], name))
 
 class Logger(object):
     def __init__(self, filename=None):
@@ -102,4 +112,8 @@ class Logger(object):
     def filehandler(self):
         return self.logger.handlers[1]
 
+####
 
+# This is required here so the logger handlers are initialized whenever the module is
+# imported. Otherwise the logger will need to be manually initialized by the user.
+Logger()
