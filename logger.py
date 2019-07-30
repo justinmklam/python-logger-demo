@@ -9,7 +9,14 @@ import datetime
 import logging
 from logging.handlers import RotatingFileHandler
 
-from config import LOGGER_CONFIGS
+
+ROOT_NAME = "my_logger"
+LOG_DIRECTORY = "logs"
+LOG_TO_FILE = True
+LOG_LEVEL = logging.DEBUG
+MAX_SIZE_OF_SINGLE_LOG = 2e3
+NUM_ROTATING_LOGS = 5
+
 
 def add_logger(name):
     """Add child logger to root logger
@@ -20,7 +27,8 @@ def add_logger(name):
     Returns:
         logger: Return a logger with the specified name
     """
-    return logging.getLogger("%s.%s"%(LOGGER_CONFIGS["root_name"], name))
+    return logging.getLogger("%s.%s"%(ROOT_NAME, name))
+
 
 class Logger(object):
     def __init__(self, filename=None):
@@ -34,8 +42,8 @@ class Logger(object):
             logging.Logger: Logger handler
         """
 
-        self.logger = logging.getLogger(LOGGER_CONFIGS["root_name"])
-        self.logger.setLevel(LOGGER_CONFIGS["logging_level"])
+        self.logger = logging.getLogger(ROOT_NAME)
+        self.logger.setLevel(LOG_LEVEL)
 
         # This is a useful check if multiple classes will be importing this method.
         # It ensures that the logger only gets initialized once.
@@ -44,11 +52,11 @@ class Logger(object):
                 "%(asctime)s [%(levelname)s] %(module)s.%(funcName)s: %(message)s"
             )
             sh = logging.StreamHandler()
-            sh.setLevel(LOGGER_CONFIGS["logging_level"])
+            sh.setLevel(LOG_LEVEL)
             sh.setFormatter(formatter)
             self.logger.addHandler(sh)
 
-            if LOGGER_CONFIGS["log_to_file"]:
+            if LOG_TO_FILE:
                 self._initialize_file_logger(filename, formatter)
 
             # Logger handler for unhandled exception
@@ -57,17 +65,17 @@ class Logger(object):
         self.logger.debug("Logger initialized.")
 
     def _initialize_file_logger(self, filename, formatter):
-        if not os.path.exists(LOGGER_CONFIGS["directory"]):
-            self.logger.debug("%s created." % LOGGER_CONFIGS["directory"])
-            os.makedirs(LOGGER_CONFIGS["directory"])
+        if not os.path.exists(LOG_DIRECTORY):
+            self.logger.debug("%s created." % LOG_DIRECTORY)
+            os.makedirs(LOG_DIRECTORY)
 
         if filename is None:
-            filename = LOGGER_CONFIGS["root_name"]
+            filename = ROOT_NAME
 
         fh = RotatingFileHandler(
-            filename=os.path.join(LOGGER_CONFIGS["directory"], filename + ".log"),
-            maxBytes=LOGGER_CONFIGS["max_size_of_single_log"],
-            backupCount=LOGGER_CONFIGS["num_rotating_logs"],
+            filename=os.path.join(LOG_DIRECTORY, filename + ".log"),
+            maxBytes=MAX_SIZE_OF_SINGLE_LOG,
+            backupCount=NUM_ROTATING_LOGS,
         )
         fh.setFormatter(formatter)
         self.logger.addHandler(fh)
