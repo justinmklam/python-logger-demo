@@ -71,18 +71,21 @@ class Logger(logging.Logger):
             self.logger.debug("Logger initialized.")
 
     def _initialize_file_logger(self, filename, formatter):
-        if not os.path.exists(LOG_DIRECTORY):
-            self.logger.debug("%s created." % LOG_DIRECTORY)
-            os.makedirs(LOG_DIRECTORY)
+        log_dir = os.path.expanduser(LOG_DIRECTORY)
+
+        if not os.path.exists(log_dir):
+            self.logger.debug("%s created." % log_dir)
+            os.makedirs(log_dir)
 
         if filename is None:
             filename = ROOT_NAME
 
         fh = RotatingFileHandler(
-            filename=os.path.join(LOG_DIRECTORY, filename + ".log"),
+            filename=os.path.join(log_dir, filename + ".log"),
             maxBytes=MAX_SIZE_OF_SINGLE_LOG_MB * 1e6,
             backupCount=NUM_ROTATING_LOGS,
         )
+
         fh.setFormatter(formatter)
         self.logger.addHandler(fh)
 
